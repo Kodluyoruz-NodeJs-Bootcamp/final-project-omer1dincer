@@ -1,0 +1,3 @@
+# Awesome Project Build with TypeORM
+
+passport / express / bcrypt ...

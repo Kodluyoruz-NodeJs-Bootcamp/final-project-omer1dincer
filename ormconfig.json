@@ -1,0 +1,24 @@
+{
+   "type": "mysql",
+   "host": "89.252.159.130",
+   "port": 3306,
+   "username": "emrecan2_gusto_omer",
+   "password": "Pd;^.0o_cR[=",
+   "database": "emrecan2_gusto_db",
+   "synchronize": true,
+   "logging": false,
+   "entities": [
+      "src/entity/**/*.ts"
+   ],
+   "migrations": [
+      "src/migration/**/*.ts"
+   ],
+   "subscribers": [
+      "src/subscriber/**/*.ts"
+   ],
+   "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+   }
+}
