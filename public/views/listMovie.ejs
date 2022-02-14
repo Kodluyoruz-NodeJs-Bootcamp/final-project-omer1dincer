@@ -1,0 +1,141 @@
+<%- include('partials/meta'); -%>
+<%- include('partials/header'); -%>
+
+<main id="main-container">
+
+    <!-- Hero -->
+    <div class="bg-image" style="background-image: url('assets/media/photos/photo27@2x.jpg');">
+        <div class="bg-black-op-75">
+            <div class="py-100 content content-top text-center">
+                <h1 class="font-w700 text-white mb-10"><%= movieList.owner.name%>'s Movies List</h1>
+            </div>
+        </div>
+    </div>
+    <!-- END Hero -->
+
+    <!-- Story -->
+    <div class="content content-full nice-copy-story">
+        <div class="row justify-content-center py-30">
+
+            <% if(movieList.movies.length){ %>
+            <% for( let i = 0 ; i<movieList.movies.length ; i++){ %>
+            <div class="col-sm-4">
+                <div class="block block-bordered block-rounded js-appear-enabled animated fadeIn" data-toggle="appear"
+                    data-offset="-200">
+                    <div class="block-content block-content-full">
+                        <div class="py-30 text-center">
+                            <div class="h4 pt-20 mb-0"><%=movieList.movies[i].name%></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            <% }else{%>
+            <div class="col-sm-4">
+                <div class="block block-bordered block-rounded js-appear-enabled animated fadeIn" data-toggle="appear"
+                    data-offset="-200">
+                    <div class="block-content block-content-full">
+                        <div class="py-30 text-center">
+                            <span>This User Has No Movies</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+        </div>
+
+        <div class="row justify-content-center py-30">
+            <div class="col-lg-8 clearfix">
+                <button type="button" class="btn btn-rounded btn-secondary mr-5f float-right" id="<%= starList.id %>"
+                    onclick="likeList(this.id)">
+                    <i class="fa fa-heart text-danger mr-5 "></i> Like
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- END Story -->
+
+    <!-- Responses -->
+    <div class="bg-body-dark">
+        <div class="content content-full">
+            <div class="row justify-content-center py-30">
+                <div class="col-lg-8">
+                    <h3 class="font-w700 mb-50">Comments (<%= movieList.comments.length %>) </h3>
+
+                    <% if(movieList.comments.length){ %>
+                    <% for( let i = 0; i<movieList.comments.length ; i++) { %>
+                    <div class="media mb-30">
+                        <div class="media-body">
+                            <p class="mb-5"><b>-></b>
+                                <%= movieList.comments[i].comment  %> </p>
+                        </div>
+                    </div>
+                    <% } %>
+                    <% } else{  %>
+                    <div class="media mb-30">
+                        <div class="media-body">
+                            <span>There is no comments</span>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <div class="media mb-30">
+                        <div class="media-body">
+                            <form action="be_pages_generic_story.html" method="post" onsubmit="return false;" id="comment-form">
+                                <input type="hidden" name="list-id" id="list-id" value="<%= movieList.id %>">
+                                <textarea class="form-control mb-5" rows="5" id="comment"
+                                    placeholder="Write a response.."></textarea>
+                                <button type="submit" class="btn btn-secondary">
+                                    <i class="fa fa-reply mr-5"></i>Comment
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Responses -->
+
+</main>
+
+<script>
+    $(document).ready(function () {
+        $("#comment-form").submit(function (event) {
+            event.preventDefault();
+            var formData = {
+                list_id: $('#list-id').val(),
+                comment: $('#comment').val()
+            };
+            $.ajax({
+                type: "POST",
+                url: "/comment/movie/add",
+                data: formData,
+                dataType: "json",
+                encode: true,
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (response) {
+                    setTimeout(function () {
+                        alert(response['error']);
+                    }, 5000);
+                }
+            });
+        });
+    });
+
+    likeList = (id) => {
+        $.ajax({
+            type: "POST",
+            url: '/like/movie',
+            data: {
+                id: id
+            },
+            dataType: " json"
+        })
+    }
+</script>
+
+<%- include('partials/footer'); -%>

@@ -1,49 +1,68 @@
-import { relative } from 'path';
+import * as express from 'express';
+import * as dotenv from 'dotenv';
+import { Request, Response, NextFunction } from 'express';
 import { createConnection } from 'typeorm';
-import { Movie } from './entity/Movie';
-import { User } from './entity/User';
+import * as session from 'express-session';
+import * as passport from 'passport';
+import * as passportAuth from './auth/passportAuth/passportAuth';
+import * as path from 'path';
+import { isAuthenticated, isLoggedIn } from './middleware/authentication.middleware';
+import { LoginRouter } from './routes/Login.Route';
+import { RegisterRoute } from './routes/Register.Route';
+import { Routers } from './routes/Routes.Route';
+import { errorMiddleware } from './middleware/errorHandler.middleware';
+dotenv.config();
 
-createConnection()
-	.then(async (connection) => {
-		// console.log("Inserting a new user into the database...");
-		// const user = new User();
-		// user.firstName = "Timber";
-		// user.lastName = "Saw";
-		// user.age = 25;
-		// await connection.manager.save(user);
-		// console.log("Saved a new user with id: " + user.id);
+class App {
+	private app: express.Application;
 
-		// console.log("Loading users from the database...");
-		// const users = await connection.manager.find(User);
-		// console.log("Loaded users: ", users);
+	constructor() {
+		this.app = express();
+		this.config();
+		this.initRoutes();
+	}
 
-		// const user = new User();
-		// user.firstName = "Azat";
+	private config() {
+		this.app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
 
-		// await connection.manager.save(user);
-		// const movie = new Movie();
+		passportAuth.passportAuthInitialize(passport);
+		this.app.use(express.json());
+		this.app.use(express.urlencoded({ extended: true }));
+		this.app.use(passport.initialize());
+		this.app.use(passport.session());
 
-		let user = new User();
+		this.app.use(express.static(path.join(__dirname, '../public')));
+		this.app.set('view engine', 'ejs');
+		this.app.set('views', path.join(__dirname, '../public/views'));
+	}
 
-		user.firstName = 'TestName';
-		user.firstName = '123123';
+	private initRoutes() {
+		this.app.get('/', [isLoggedIn], (req: Request, res: Response) => {
+			res.render('landing', { pageTitle: 'Welcome', message: '' });
+		});
 
-		const param = await user.save();
+		this.app.use(LoginRouter);
+		this.app.use(RegisterRoute);
 
-		console.log(param.id);
+		this.app.use([isAuthenticated], Routers);
 
-		// movie.movieName = "Recep İvedik";
-		// movie.user_id = azat;
+		this.app.get('/logout' , (req:Request ,res:Response ,next : NextFunction)=>{
+			req.logOut();
+			res.status(301).redirect('/')
+		})
 
-		// await connection.manager.save(movie);
+		//Error Middleware
+		this.app.use(errorMiddleware);
+	}
 
-		// const movie2 = new Movie();
+	public StartApp() {
+		createConnection().then(() => {
+			console.log('Connected To DB');
+			this.app.listen(process.env.APP_PORT, () => {
+				console.log('Online');
+			});
+		}).catch((error)=>{console.log("Error Happened")});
+	}
+}
 
-		// movie2.movieName = "Recep İvedik";
-		// movie2.user_id = azat;
-
-		// await connection.manager.save(movie2);
-
-		// console.log("Here you can setup and run express/koa/any other framework.");
-	})
-	.catch((error) => console.log(error));
+export default App;

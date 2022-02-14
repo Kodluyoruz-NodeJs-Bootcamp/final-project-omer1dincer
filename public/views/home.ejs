@@ -1,0 +1,41 @@
+<%- include('partials/meta'); -%>
+<%- include('partials/header'); -%>
+
+<div class="content">
+    <div class="row">
+        <!-- Row #2 -->
+        <% if(users) %>
+        <% for(var i = 0 ; i<users.length ; i++) {%>
+        <div class="col-md-6 col-xl-3">
+            <a class="block text-center" href="/user/<%=users[i].id%>">
+                <div class="block-content block-content-full block-content-sm bg-pulse">
+                    <span class="font-w600 text-white"><%= users[i].name || users[i].username %></span>
+                </div>
+                <div class="block-content block-content-full bg-pulse-lighter">
+                    <img class="img-avatar img-avatar-thumb" src="assets/media/gr.png" alt="">
+                </div>
+                <div class="block-content">
+                    <div class="row items-push text-center">
+                        <div class="col-6">
+                            <div class="mb-5"><i class="fa fa-heart fa-2x"></i></div>
+                            <div class="font-size-sm text-muted">
+                                <%= users[i].movieList.likes + users[i].starList.likes %> </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-5"><i class="fa fa-comments-o fa-2x"></i></div>
+                            <div class="font-size-sm text-muted">
+                                <%= (users[i].movieList.comments ? users[i].movieList.comments.length : 0)  + (users[i].starList.comments ? users[i].starList.comments.length : 0) %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <% }  // End Of For%>
+
+
+        <!-- END Row #2 -->
+    </div>
+</div>
+
+<%- include('partials/footer'); -%>

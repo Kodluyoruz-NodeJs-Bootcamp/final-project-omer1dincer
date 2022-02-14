@@ -1,0 +1,113 @@
+<%- include('partials/meta'); -%>
+<%- include('partials/header'); -%>
+<main id="main-container">
+
+    <!-- Page Content -->
+    <!-- User Info -->
+    <div class="bg-image bg-image-bottom" style="background-image: url('assets/media/photos/photo13@2x.jpg');">
+        <div class="bg-primary-dark-op py-30">
+            <div class="content content-full text-center">
+                <!-- Avatar -->
+                <div class="mb-15">
+
+                </div>
+                <!-- END Avatar -->
+
+                <!-- Personal -->
+                <h1 class="h3 text-white font-w700 mb-10"><%= user.name %> </h1>
+                <!-- END Personal -->
+            </div>
+        </div>
+    </div>
+    <!-- END User Info -->
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Projects -->
+        <h2 class="content-heading text-center">
+            Lists
+        </h2>
+        <div class="row items-push">
+            <div class="col-md-6 col-xl-3">
+
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="block block-rounded ribbon ribbon-modern ribbon-primary text-center">
+                    <div class="block-content block-content-full">
+                        <div class="item item-circle text-error-light mx-auto my-20">
+                            <i class="fa fa-file-movie-o fa-2x"></i>
+                        </div>
+
+                        <% if(user.movieList.movies.length>0){ %>
+
+                        <% for(let i = 0 ; i<user.movieList.movies.length ; i++){ %>
+                        <div class="text-warning">
+                            <i class="fa fa-fw fa-star"></i> <span><%= user.movieList.movies[i].name %> </span>
+                        </div>
+                        <% } %>
+                        <% } else { %>
+                        <div class="text-warning">
+                            <span><%= user.name || user.username %> does not have any favorite movie </span>
+                        </div>
+                        <% } %>
+
+                    </div>
+                    <div class="block-content block-content-full block-content-sm bg-body-light">
+                        <div class="font-w600 mb-5">Movie List</div>
+                        <div class="font-size-sm text-muted">Total Movie Count :
+                            <%= user.movieList.movies ? user.movieList.movies.length : 0  %> </div>
+                    </div>
+                    <div class="block-content block-content-full">
+                        <a class="btn btn-rounded btn-alt-secondary" href="/user/list/movie/<%=user.movieList.id%>">
+                            View List
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="block block-rounded ribbon ribbon-modern ribbon-primary text-center">
+                    <div class="block-content block-content-full">
+                        <div class="item item-circle text-error-light mx-auto my-20">
+                            <i class="fa fa-star fa-2x"></i>
+                        </div>
+
+                        <% if(user.starList.stars.length>0){ %>
+
+                        <% for(let i = 0 ; i<user.starList.stars.length; i++){ %>
+                        <div class="text-warning">
+                            <i class="fa fa-fw fa-star"></i> <span><%= user.starList.stars[i].name %> </span>
+                        </div>
+                        <% } %>
+                        <% } else { %>
+                        <div class="text-warning">
+                            <span><%= user.name || user.username %> does not have any favorite star </span>
+                        </div>
+                        <% } %>
+
+                    </div>
+
+                    <div class="block-content block-content-full block-content-sm bg-body-light">
+                        <div class="font-w600 mb-5">Star List</div>
+                        <div class="font-size-sm text-muted">Total Star Count
+                            <%= user.starList.stars ? user.starList.stars.length : 0  %></div>
+                    </div>
+                    <div class="block-content block-content-full">
+                        <a class="btn btn-rounded btn-alt-secondary" href="/user/list/star/<%=user.starList.id%>">
+                            View List
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+
+            </div>
+        </div>
+        <!-- END Projects -->
+
+
+    </div>
+    <!-- END Main Content -->
+    <!-- END Page Content -->
+
+</main>
+<%- include('partials/footer'); -%>

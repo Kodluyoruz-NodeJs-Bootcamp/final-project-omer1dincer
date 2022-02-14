@@ -1,0 +1,421 @@
+<%- include('partials/meta'); -%>
+<%- include('partials/header'); -%>
+
+
+<main id="main-container">
+
+    <!-- Page Content -->
+    <!-- User Info -->
+    <div class="bg-image bg-image-bottom" style="background-image: url('assets/media/photos/photo13@2x.jpg');">
+        <div class="bg-primary-dark-op py-30">
+            <div class="content content-full text-center">
+                <!-- Avatar -->
+                <div class="mb-15">
+                    <img class="img-avatar img-avatar96 img-avatar-thumb" src="/assets/media/avatars/avatar15.jpg"
+                        alt="">
+                </div>
+                <!-- END Avatar -->
+                <!-- Personal -->
+                <h1 class="h3 text-white font-w700 mb-10"><%= user.username || user.name %> </h1>
+                <h2 class="h5 text-white-op">
+                    Total Movies : <%=  user.movieList.movies.length  %> <br>
+                    <p class="text-primary-light">Total Stars <%=  user.starList.stars.length  %></p>
+                </h2>
+                <!-- END Personal -->
+
+                <!-- Actions -->
+                <button type="button" class="btn btn-rounded btn-hero btn-sm btn-alt-success mb-5" data-toggle="modal"
+                    data-target="#create-movie-modal">
+                    <i class="fa fa-file-movie-o"></i> Create New Movie
+                </button>
+                <button type="button" class="btn btn-rounded btn-hero btn-sm btn-alt-success mb-5" data-toggle="modal"
+                    data-target="#create-star-modal">
+                    <i class="fa fa-file-movie-o"></i> Create New Star
+                </button>
+                <!-- END Actions -->
+            </div>
+        </div>
+    </div>
+    <!-- END User Info -->
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Tables-->
+        <h2 class="content-heading text-center">
+            <i class="fa fa-file-movie-o"></i> Movies
+        </h2>
+        <div class="row">
+            <!-- Movies Table -->
+
+            <div class="col-md-5 mx-auto">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Movies</h3>
+                    <div class="block-options">
+                    </div>
+                </div>
+                <div class="block-content">
+                    <table class="table table-vcenter">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th class="text-center" style="width: 100px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(user.movieList.movies) {%>
+                            <% for (let i = 0 ; i<user.movieList.movies.length ; i++) {%>
+                            <tr>
+                                <td><%= user.movieList.movies[i].name %> </td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled"
+                                            data-toggle="modal" title="" data-original-title="Edit"
+                                            data-id="<%= user.movieList.movies[i].id%>"
+                                            data-target="#update-movie-modal" onclick="passDataMovieModal(this)">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled"
+                                            data-toggle="modal" title="" id="<%= user.movieList.movies[i].id%>"
+                                            data-original-title="Delete" onclick="deleteMovie(this.id)" ;>
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% } %>
+                            <% }else{ %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END Movies Table -->
+
+
+            <!-- Stars Table -->
+            <div class=" col-md-5 mx-auto">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Stars</h3>
+                    <div class="block-options">
+                    </div>
+                </div>
+                <div class="block-content">
+                    <table class="table table-vcenter">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th class="text-center" style="width: 100px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(user.starList.stars) {%>
+                            <% for (let i = 0 ; i<user.starList.stars.length ; i++) {%>
+                            <tr>
+                                <td><%= user.starList.stars[i].name %> </td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled"
+                                            data-toggle="modal" title="" data-original-title="Edit" 
+                                            data-id="<%= user.starList.stars[i].id%>"
+                                            data-target="#update-star-modal" onclick="passDataStarModal(this)">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled"
+                                            data-toggle="tooltip" title="" id="<%= user.starList.stars[i].id%>"
+                                            onclick="deleteStar(this.id)" data-original-title="Delete">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% } %>
+                            <% }else{ %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END Stars Table -->
+
+
+            <!--Create Movie Modal-->
+
+            <div class="modal fade" id="create-movie-modal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">New movie</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="create-star" class="create-star">
+                                <div class="form-group">
+                                    <label for="movie-name" class="col-form-label">Movie
+                                        Name</label>
+                                    <input type="text" class="form-control" id="movie-name">
+                                </div>
+                                <input type="hidden" id="movieList-id" value="<%= user.starList.id %>">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="create-movie" type="submit">Add
+                                Movie</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--END Create Movie Modal-->
+
+
+            <!--Create Star Modal-->
+
+            <div class="modal fade" id="create-star-modal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">New Star</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="create-star" class="create-star">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Star
+                                        Name</label>
+                                    <input type="text" class="form-control" id="star-name">
+                                </div>
+                                <input type="hidden" id="starList-id" value="<%= user.starList.id %> ">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close-btn" class="btn btn-secondary"
+                                data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="create-star" type="submit">Add
+                                Star</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="update-movie-modal" tabindex="-1" role="dialog"
+                aria-labelledby="update-movie-modal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Update Movie Name
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="update-movie" class="update-movie">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">New Movie
+                                        Name</label>
+                                    <input type="text" class="form-control" id="new-movie-name">
+                                    <input type="hidden" id="update-movie-id">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close-btn" class="btn btn-secondary"
+                                data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="update-movie" type="submit">Update
+                                Movie</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="update-star-modal" tabindex="-1" role="dialog"
+                aria-labelledby="update-star-modal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Update Star Name
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="update-movie" class="update-movie">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">New Star
+                                        Name</label>
+                                    <input type="text" class="form-control" id="new-star-name">
+                                    <input type="hidden" id="update-star-id">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close-btn" class="btn btn-secondary"
+                                data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="update-star" type="submit">Update
+                                Star</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--END Create Star Modal-->
+        </div>
+        <!-- END Tables -->
+
+    </div>
+    <!-- END Main Content -->
+    <!-- END Page Content -->
+
+</main>
+<script>
+    $(function () {
+
+        $('#create-star').on('click', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "/star/add",
+                dataType: "json",
+                data: {
+                    id: $('#starList-id').val(),
+                    name: $('#star-name').val()
+                },
+                success: function (response) {
+                    alert(response['success']);
+                    $('#create-star-modal').modal("hide");
+                    location.reload();
+                },
+                error: function () {
+                    alert('Error');
+                    $('#create-star-modal').modal("hide");
+                }
+            });
+
+        });
+
+        $('#create-movie').on('click', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "/movie/add",
+                dataType: "json",
+                data: {
+                    movieListId: $('#movieList-id').val(),
+                    name: $('#movie-name').val()
+                },
+                success: function (response) {
+                    alert(response['success']);
+                    $('#create-movie-modal').modal("hide");
+                    location.reload();
+                },
+                error: function (response) {
+                    alert(response['error']);
+                    $('#create-movie-modal').modal("hide");
+                }
+            });
+        });
+
+        $('#update-movie').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                method: "PUT",
+                url: "/movie/update",
+                dataType: "json",
+                data: {
+                    name: $('#new-movie-name').val(),
+                    id: $('#update-movie-id').val()
+                },
+                success: function (response) {
+                    alert(response['success']);
+                    $('#update-movie-modal').modal("hide");
+                    location.reload();
+                },
+                error: function (response) {
+                    alert(response['error']);
+                    $('#update-movie-modal').modal("hide");
+                }
+            })
+        })
+
+        $('#update-star').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                method: "PUT",
+                url: "/star/update",
+                dataType: "json",
+                data: {
+                    name: $('#new-star-name').val(),
+                    id: $('#update-star-id').val()
+                },
+                success: function (response) {
+                    alert(response['success']);
+                    $('#update-star-modal').modal("hide");
+                    location.reload();
+                },
+                error: function (response) {
+                    alert(response['error']);
+                    $('#update-star-modal').modal("hide");
+                }
+            })
+        })
+    });
+
+    function deleteMovie(id) {
+        $.ajax({
+            type: "DELETE",
+            data: {
+                id: id
+            },
+            dataType: "json",
+            url: '/movie/delete',
+            success: function (response) {
+                alert(response['success']);
+                location.reload();
+            },
+            error: function (response) {
+                alert(response['error']);
+            }
+        })
+    }
+
+    function deleteStar(id) {
+        $.ajax({
+            type: "DELETE",
+            data: {
+                id: id
+            },
+            dataType: "json",
+            url: '/star/delete',
+            success: function (response) {
+                alert(response['success']);
+                location.reload();
+            },
+            error: function (response) {
+                alert(response['error']);
+            }
+        })
+    }
+
+    function passDataMovieModal(elem) {
+        var movie_id = $(elem).attr("data-id")
+        $('#update-movie-id').val(movie_id);
+    }
+
+    function passDataStarModal(elem) {
+        var _star_id = $(elem).attr("data-id")
+        console.log(_star_id);
+        $('#update-star-id').val(_star_id);
+    }
+</script>
+
+<%- include('partials/footer'); -%>
