@@ -58,10 +58,10 @@ class App {
 	public StartApp() {
 		createConnection().then(() => {
 			console.log('Connected To DB');
-			this.app.listen(process.env.APP_PORT, () => {
+			this.app.listen(process.env.PORT || 5000, () => {
 				console.log('Online');
 			});
-		}).catch((error)=>{console.log("Error Happened")});
+		}).catch((error)=>{console.log("Error Happened" , error.message)});
 	}
 }
 

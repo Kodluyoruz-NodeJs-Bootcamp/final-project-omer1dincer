@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
-import BaseError from '../errors/baseError.error';
+import BaseError from '../errors/BaseError.error';
 
 export const errorMiddleware = async (err: BaseError, req: Request, res: Response, next: NextFunction) => {
 	const errObj = {

@@ -1,4 +1,4 @@
-import BaseError from './baseError.error';
+import BaseError from './BaseError.error';
 
 export default class AuthenticationError extends BaseError {
 	statusCode: number;

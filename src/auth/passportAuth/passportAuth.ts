@@ -19,7 +19,7 @@ export const passportAuthInitialize = (passport) => {
 			{
 				clientID: '277235604500759',
 				clientSecret: 'ac8db9606cba1229e3c3ee6ed7222ba6',
-				callbackURL: 'http://localhost:' + process.env.APP_PORT + '/facebook/callback'
+				callbackURL: 'http://localhost:' + process.env.PORT || 5000 + '/facebook/callback'
 			},
 			async function (accessToken: string, refreshToken: string, profile: passport.Profile, done: any): Promise<void> {
 				/*First , check if Facebook Profile is registered app*/
@@ -51,7 +51,7 @@ export const passportAuthInitialize = (passport) => {
 			{
 				clientID: '804366156039-lqjb3c269tjmkcc7msmsbkruu9i4lk0q.apps.googleusercontent.com',
 				clientSecret: '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',
-				callbackURL: 'http://localhost:' + process.env.APP_PORT + '/google/callback',
+				callbackURL: 'http://localhost:' + process.env.PORT || 5000 + '/google/callback',
 				passReqToCallback: true
 			},
 			async function (
