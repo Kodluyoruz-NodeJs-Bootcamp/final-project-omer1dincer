@@ -61,7 +61,7 @@ class App {
 			this.app.listen(process.env.PORT || 5000, () => {
 				console.log('Online');
 			});
-		}).catch((error)=>{console.log("Error Happened")});
+		}).catch((error)=>{console.log("Error Happened" , error.message)});
 	}
 }
 
