@@ -16,8 +16,8 @@
       "@types/passport-facebook": "^2.1.11",
       "@types/passport-google-oauth2": "^0.1.4",
       "@types/passport-local": "^1.0.34",
-      "ts-node": "3.3.0",
-      "typescript": "3.3.3333"
+      "ts-node": "^3.3.0",
+      "typescript": "^3.3.3333"
    },
    "dependencies": {
       "bcryptjs": "^2.4.3",
@@ -36,6 +36,7 @@
       "passport-google-oauth2": "^0.2.0",
       "passport-local": "^1.0.0",
       "reflect-metadata": "^0.1.10",
+      "tsc": "^2.0.4",
       "typeorm": "0.2.41"
    },
    "scripts": {
