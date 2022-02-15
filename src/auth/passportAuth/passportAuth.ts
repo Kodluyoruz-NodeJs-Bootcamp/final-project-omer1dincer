@@ -51,7 +51,8 @@ export const passportAuthInitialize = (passport) => {
 			{
 				clientID: '804366156039-lqjb3c269tjmkcc7msmsbkruu9i4lk0q.apps.googleusercontent.com',
 				clientSecret: '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',
-				callbackURL: 'http://localhost:' + process.env.PORT || 5000 + '/google/callback',
+				// callbackURL: 'http://localhost:' + process.env.PORT || 5000 + '/google/callback',
+				callbackURL: '/google/callback',
 				passReqToCallback: true
 			},
 			async function (
